@@ -8,21 +8,28 @@ public class Move : MonoBehaviour
 
     [SerializeField] float _speed = 10f;
 
+    private float _horizontal;
+    Vector3 pos;
+    private float _minX = -10;
+    private float _maxX = 10;
+
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _rigidBody.freezeRotation = true;   // RigidbodyÇÃ X, Y, Z ÇÃRotationÇå≈íË
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //TODO
-        //à⁄ìÆÇπÇÊ
-        //https://candle-stoplight-544.notion.site/4e021f226d584730b715626436ccc330
+        _horizontal = Input.GetAxis("Horizontal");
         if (!isStop)
         {
-            _rigidBody.velocity = new Vector3(0, 0, -1) * _speed;
+            _rigidBody.velocity = new Vector3(-_horizontal, 0, -1) * _speed;
+
+            // à⁄ìÆêßå¿
+            pos = this.transform.position;
+            pos.x = Mathf.Clamp(pos.x, _minX, _maxX);
+            transform.position = pos;
         }
         else
         {
@@ -30,6 +37,10 @@ public class Move : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ÉSÅ[ÉãîªíË
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Goal"))
