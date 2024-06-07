@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// ƒAƒCƒeƒ€‚ğ¶¬‚·‚é
+/// </summary>
 public class ItemGenerator : MonoBehaviour
 {
     private GameObject _item;

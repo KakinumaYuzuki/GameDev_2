@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Player‚Ìˆ—
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]   // Rigidbody‚ğ’Ç‰Á
 public class Move : MonoBehaviour
 {
@@ -13,10 +16,13 @@ public class Move : MonoBehaviour
     private float _minX = -10;
     private float _maxX = 10;
 
+    private Score _score;
+
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _rigidBody.freezeRotation = true;   // Rigidbody‚Ì X, Y, Z ‚ÌRotation‚ğŒÅ’è
+        _score = FindFirstObjectByType<Score>();
     }
 
     void Update()
@@ -47,5 +53,15 @@ public class Move : MonoBehaviour
         {
             isStop = true;
         }
+    }
+
+    /// <summary>
+    /// ƒAƒCƒeƒ€(Trigger)‚Æ‚ÌÚG”»’è
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        _score.CurrentScore += 1;
+        Destroy(other.gameObject);
     }
 }
