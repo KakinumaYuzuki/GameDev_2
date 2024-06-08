@@ -6,6 +6,8 @@ using UnityEngine;
 public class ItemGenerator : MonoBehaviour
 {
     private GameObject _item;
+
+    private Lane _lane;
     void Start()
     {
         _item = (GameObject)Resources.Load("Item");
@@ -16,7 +18,9 @@ public class ItemGenerator : MonoBehaviour
     {
         for (int i = -5; i >= -100; i -= 5)
         {
-            Instantiate(_item, new Vector3(0, 1, i), Quaternion.identity).transform.parent = this.transform;
+            // ƒŒ[ƒ“ã‚Åƒ‰ƒ“ƒ_ƒ€‚É¶¬
+            _lane = (Lane)Random.Range(-1, 2);
+            Instantiate(_item, new Vector3(-(int)_lane * 5, 1, i), Quaternion.identity).transform.parent = this.transform;
         }
     }
 }

@@ -7,39 +7,56 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     [SerializeField] Rigidbody _rigidBody;
-    bool isStop = false;
+    bool isGoal = false;
 
     [SerializeField] float _speed = 10f;
 
-    private float _horizontal;
     Vector3 pos;
-    private float _minX = -10;
-    private float _maxX = 10;
 
     private Score _score;
+    private Lane _currentLane;
 
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _rigidBody.freezeRotation = true;   // RigidbodyÇÃ X, Y, Z ÇÃRotationÇå≈íË
         _score = FindFirstObjectByType<Score>();
+        _currentLane = Lane.Center;
     }
 
     void Update()
     {
-        _horizontal = Input.GetAxis("Horizontal");
-        if (!isStop)
+        MovePlayer();
+        if (!isGoal)
         {
-            _rigidBody.velocity = new Vector3(-_horizontal, 0, -1) * _speed;
-
-            // à⁄ìÆêßå¿
+            // ÉåÅ[Éìè„Ç≈ìÆÇ≠ÇÊÇ§Ç…ÇµÇΩ
             pos = this.transform.position;
-            pos.x = Mathf.Clamp(pos.x, _minX, _maxX);
-            transform.position = pos;
+            _rigidBody.MovePosition(new Vector3(-(int)_currentLane * 5, pos.y, pos.z));
+            _rigidBody.velocity = new Vector3(0, 0, -1) * _speed;
         }
         else
         {
             _rigidBody.velocity = Vector3.zero;
+        }
+    }
+
+    private void MovePlayer()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (_currentLane == Lane.Center || _currentLane == Lane.Right)
+            {
+                _currentLane -= 1;
+            }
+            Debug.Log(_currentLane);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (_currentLane == Lane.Center || _currentLane == Lane.Left)
+            {
+                _currentLane += 1;
+            }
+            Debug.Log(_currentLane);
         }
     }
 
@@ -51,7 +68,7 @@ public class Move : MonoBehaviour
     {
         if (collision.collider.CompareTag("Goal"))
         {
-            isStop = true;
+            isGoal = true;
         }
     }
 
